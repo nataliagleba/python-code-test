@@ -30,7 +30,7 @@ class ListingAPI(CreateAPIView, ListAPIView):
     serializer_class = ListingSerializer
     queryset = Listing.objects.all()
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('price',)
+    ordering_fields = ('price', 'created_at',)
 
     def perform_create(self, serializer):
         return serializer.save()
