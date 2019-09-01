@@ -7,7 +7,10 @@ class ListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Listing
         fields = '__all__'
-        extra_kwargs = {'price': {'required': True}, 'name': {'required': True}}
+        extra_kwargs = {
+            'price': {'required': True},
+            'name': {'required': True}
+        }
 
 
 class StarshipSerializer(serializers.ModelSerializer):

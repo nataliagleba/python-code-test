@@ -2,7 +2,6 @@ from django.conf.urls import url
 
 from shiptrader import views
 
-
 urlpatterns = [
     url(r'^starships/$', views.StarshipAPI.as_view(), name='starships'),
     url(r'^starships/(?P<pk>[0-9]+)/$', views.StarshipDetailAPI.as_view(), name='starship'),

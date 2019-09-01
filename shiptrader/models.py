@@ -15,6 +15,7 @@ class Starship(models.Model):
     def __str__(self):
         return '{} {}-{}'.format(self.id, self.starship_class, self.manufacturer)
 
+
 class Listing(models.Model):
     name = models.CharField(max_length=255)
     ship_type = models.ForeignKey(Starship, related_name='listings')

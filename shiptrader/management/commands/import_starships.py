@@ -5,17 +5,10 @@ from django.core.management import BaseCommand
 
 from shiptrader.models import Starship
 
-
 BASE_SWAPI_URL = 'https://swapi.co/api/'
 
 
 class Command(BaseCommand):
-
-
-    def make_acceptable(self, value):
-        '''make string convertible to numerical value'''
-        acceptable_value = None if value == 'unknown' else value.replace(',', '')
-        return acceptable_value
 
     def import_starship(self, data):
         numerical_fields = ('length', 'hyperdrive_rating', 'passengers', 'crew', 'cargo_capacity')
@@ -26,11 +19,14 @@ class Command(BaseCommand):
             starship_data[field] = data[field]
 
         for field in numerical_fields:
-            starship_data[field] = self.make_acceptable(data[field])
+            starship_data[field] = self.make_string_convertibale_to_numerilcal(data[field])
 
         starship = Starship.objects.create(**starship_data)
         self.stdout.write('Imported Starship ID: {}'.format(starship.id))
 
+    def make_string_convertibale_to_numerilcal(self, value):
+        acceptable_value = None if value == 'unknown' else value.replace(',', '')
+        return acceptable_value
 
     def handle(self, *args, **options):
 
@@ -48,4 +44,5 @@ class Command(BaseCommand):
                     failed += 1
                     traceback.print_exc()
             current_endpoint = results['next']
-        self.stdout.write('Finished. \n Succesfully imported {} starship. \n {} starships failed to import'.format(succed, failed))
+        self.stdout.write(
+            'Finished. \n Succesfully imported {} starship. \n {} starships failed to import'.format(succed, failed))

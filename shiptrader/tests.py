@@ -16,7 +16,7 @@ class TestShiptraderAPI(APITestCase):
             'manufacturer': 'Manufacturer 1',
             'passengers': 50,
             'starship_class': 'First Class'
-            }
+        }
         self.starship_no_2_data = {
             'cargo_capacity': 3000,
             'crew': 10,
@@ -68,7 +68,6 @@ class TestShiptraderAPI(APITestCase):
             'ship_type': self.starship_no_2_object,
             'price': 20
         })
-
 
     def tearDown(self):
         Starship.objects.all().delete()

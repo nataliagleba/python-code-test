@@ -9,16 +9,14 @@ class StarshipAPI(CreateAPIView, ListAPIView):
     serializer_class = StarshipSerializer
 
     def get_queryset(self):
-        queryset = Starship.objects.all()
         starship_class = self.request.query_params.get('starship_class', None)
         if starship_class is not None:
             queryset = Starship.objects.filter(
                 starship_class__iexact=starship_class
             )
+        else:
+            queryset = Starship.objects.all()
         return queryset
-
-    def perform_create(self, serializer):
-        return serializer.save()
 
 
 class StarshipDetailAPI(RetrieveUpdateDestroyAPIView):
@@ -31,9 +29,6 @@ class ListingAPI(CreateAPIView, ListAPIView):
     queryset = Listing.objects.all()
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('price', 'created_at',)
-
-    def perform_create(self, serializer):
-        return serializer.save()
 
 
 class ListingDetailAPI(RetrieveUpdateDestroyAPIView):
