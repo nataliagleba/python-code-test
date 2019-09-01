@@ -1,4 +1,5 @@
 import requests
+import traceback
 
 from django.core.management import BaseCommand
 
@@ -18,7 +19,7 @@ class Command(BaseCommand):
 
     def import_starship(self, data):
         numerical_fields = ('length', 'hyperdrive_rating', 'passengers', 'crew', 'cargo_capacity')
-        text_fields = ('model', 'starship_class', 'manufacturer')
+        text_fields = ('starship_class', 'manufacturer')
 
         starship_data = {}
         for field in text_fields:
@@ -27,17 +28,24 @@ class Command(BaseCommand):
         for field in numerical_fields:
             starship_data[field] = self.make_acceptable(data[field])
 
-        starship = Starship.objects.create(**data)
-        self.stdout.write('Imported Starship {}'.format(starship))
+        starship = Starship.objects.create(**starship_data)
+        self.stdout.write('Imported Starship ID: {}'.format(starship.id))
 
 
     def handle(self, *args, **options):
 
         current_endpoint = BASE_SWAPI_URL + 'starships/?page=1'
 
+        failed, succed = 0, 0
         while current_endpoint:
             self.stdout.write('Current page {}'.format(current_endpoint))
             results = requests.get(current_endpoint).json()
-            for starship_data in results:
-                self.import_starship(starship_data)
+            for starship_data in results['results']:
+                try:
+                    self.import_starship(starship_data)
+                    succed += 1
+                except Exception as e:
+                    failed += 1
+                    traceback.print_exc()
             current_endpoint = results['next']
+        self.stdout.write('Finished. \n Succesfully imported {} starship. \n {} starships failed to import'.format(succed, failed))
