@@ -1,59 +1,91 @@
-# Ostmodern Python Code Test
+# Shiptrader API
 
-The goal of this exercise is to test that you know your way around Django and
-REST APIs. Approach it the way you would an actual long-term project.
+## Starships endpoints:
 
-The idea is to build a platform on which your users can buy and sell Starships.
-To make this process more transparent, it has been decided to source some
-technical information about the Starships on sale from the [Starship
-API](https://swapi.co/documentation#starships).
+- Get list of all Starships:
 
-A Django project some initial data models have been created already. You may need
-to do some additional data modelling to satify the requirements.
+`GET: /api/starships/`
 
-## Getting started
+- Get list of Starships filtered by class:
 
-* This test works with either
-  [Docker](https://docs.docker.com/compose/install/#install-compose) or
-  [Vagrant](https://www.vagrantup.com/downloads.html)
-* Get the code from `https://github.com/ostmodern/python-code-test`
-* Do all your work in your own `develop` branch
-* Once you have downloaded the code the following commands will get the site up
-  and running
+`GET: /api/starships/?starship_class=<str>`
 
-```shell
-# For Docker
-docker-compose up
-# You can run `manage.py` commands using the `./manapy` wrapper
+- Get Starship by id:
 
-# For Vagrant
-vagrant up
-vagrant ssh
-# Inside the box
-./manage.py runserver 0.0.0.0:8008
+`GET: /api/starships/<id>`
+
+- Create Starship:
+
+`POST: /api/starships/`
+
 ```
-* The default Django "It worked!" page should now be available at
-  http://localhost:8008/
+payload: {
+            'cargo_capacity': <int>,
+            'crew': <int>,
+            'hyperdrive_rating': <float>,
+            'length': <int>,
+            'manufacturer': <str>,
+            'passengers': <int>,
+            'starship_class': <str>
+        }
+```
 
-## Tasks
+- Delete Starship:
 
-Your task is to build a JSON-based REST API for your frontend developers to
-consume. You have built a list of user stories with your colleagues, but you get
-to decide how to design the API. Remember that the frontend developers will need
-some documentation of your API to understand how to use it.
+`DELETE: /api/starships/<id>`
 
-We do not need you to implement users or authentication, to reduce the amount of
-time this exercise will take to complete. You may use any external libraries you
-require.
+## Listings Endpoints
 
-* We need to be able to import all existing
-  [Starships](https://swapi.co/documentation#starships) to the provided Starship
-  Model
-* A potential buyer can browse all Starships
-* A potential buyer can browse all the listings for a given `starship_class`
-* A potential buyer can sort listings by price or time of listing
-* To list a Starship as for sale, the user should supply the Starship name and
-  list price
-* A seller can deactivate and reactivate their listing
 
-After you are done, create a release branch in your repo and send us the link.
+- Create listing:
+
+`POST: /api/listings/`
+
+```
+payload: {
+            'name': <int>,
+            'ship_type': <id>,
+            'price': <int>
+         }
+```
+
+- Get list of all listings:
+
+`GET: /api/listings/`
+
+- Get list of all listings sorted by price:
+
+ascending order:
+
+`GET: /api/listings/?ordering=price`
+
+descending order:
+
+`GET: /api/listings/?ordering=-price`
+
+- Get list of all listings sorted by time:
+
+ascending order:
+
+`GET: /api/listings/?ordering=created_at`
+
+descending order:
+
+`GET: /api/listings/?ordering=-created_at`
+
+- Get listing by id:
+
+`GET: /api/listing/<id>/`
+
+- Update listing
+
+`PATCH: /api/listing/<id>/`
+
+to activate or deactivate listing:
+ 
+ ```payload={'active': True/False}```
+
+
+## Importing data from SWAPI
+
+`python manage.py import_starships`

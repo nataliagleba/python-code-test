@@ -138,7 +138,7 @@ class TestShiptraderAPI(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_cant_create_listing_with_no_price(self):
+    def test_cant_create_listing_with_no_name(self):
         url = reverse('shiptrader:listings')
         data = self.listing_no_1_data
         data.pop('name')
